@@ -1,0 +1,5 @@
+name: bp_slow_burn
+sweep:
+  title: Slow-burn adversaries (honest 100 rounds, then +0.05%/round to +5%)
+  fault: {type: slow_burn, start: 150, growth: 0.0005, max_bias: 0.05, trust_noise_factor: 0.2}
+  seeds: 30

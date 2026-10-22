@@ -1,0 +1,5 @@
+name: bp_independent
+sweep:
+  title: Independent faulty nodes (random 2–20% errors)
+  fault: {type: outlier, prob: 1.0, size: [0.02, 0.2], start: 50}
+  seeds: 30

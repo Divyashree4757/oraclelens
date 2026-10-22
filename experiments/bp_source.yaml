@@ -1,0 +1,6 @@
+name: bp_source
+sweep:
+  title: Failing exchanges (+3% on every node that reads them)
+  by_source: true
+  fault: {type: source_fault, bias: 0.03, start: 50}
+  seeds: 30

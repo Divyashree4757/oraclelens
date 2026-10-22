@@ -1,0 +1,5 @@
+name: bp_partition
+sweep:
+  title: Network partition (nodes offline)
+  fault: {type: partition, start: 50}
+  seeds: 30

@@ -1,0 +1,122 @@
+# OracleLens
+
+A reproducible laboratory for decentralized oracle reliability. OracleLens simulates oracle networks, injects labelled failures and attacks, detects and diagnoses them, and measures **when each defense stops working**.
+
+> Independent research project inspired by decentralized oracle reliability challenges. Not affiliated with Chainlink or any oracle provider, and not a claim about any production system. All thresholds are research benchmarks, not safety limits.
+
+## Quick start
+
+```bash
+pip install -e ".[dev]"
+python -m pytest                                   # 23 tests
+python -m oraclelens.run --config experiments/mixed_faults.yaml --seed 42
+./reproduce.sh                                     # every result below, ~5 minutes
+```
+
+Every run is defined by a YAML config plus a seed and writes a self-contained folder:
+
+```
+runs/<name>/seed<seed>_<config-hash>/
+  config.json          resolved config
+  provenance.json      config hash, data hash, seed, versions, input provenance
+  metrics.json         aggregation, detection, slow-burn and attribution metrics
+  events.parquet       every node report: truth, value, latency, label, detector flags
+  predictions.parquet  every aggregate and its error
+  incidents.parquet    every diagnosed incident with probabilities and features
+  report.md            human-readable incident report
+```
+
+No database is needed to reproduce anything.
+
+## What is built
+
+| Layer | Contents |
+| --- | --- |
+| Prices | Synthetic jump-diffusion, explicit series, or historical CSV/Parquet replay with SHA-256 and manifest provenance |
+| Simulator | 10–30+ nodes, per-exchange shared errors, intra-round timing lag, lognormal latency with a deadline, packet loss |
+| Fault library | outlier, collusion, slow-burn, drift, stale, replay, offline, partition, delay, source fault, flash spike, legitimate market shock (control). Every fault writes ground-truth labels |
+| Detectors | MAD, Hampel, rolling baseline, robust CUSUM, volatility-aware MAD (all causal) |
+| Aggregators | median, 20% trimmed mean, inverse-error weighted mean, long-memory reputation-weighted mean, quorum median |
+| Diagnosis | 8-class cause attribution (none + 7 causes) with probabilities, an *insufficient evidence* abstention, and plain-language explanations that state what could not be established |
+| Evaluation | precision, recall, FPR, detection latency, aggregation error, availability, breaking points with bootstrap CIs, slow-burn damage before detection, ECE, Brier, reliability diagrams |
+| Case study | Mango Markets–style collateral pump ([docs/case_study_mango.md](docs/case_study_mango.md)) |
+
+## Definitions (fixed before running experiments)
+
+- Relative error: `E_t = |P̂_t − P_t| / P_t`
+- Failed round: `E_t > 1%` (also reported at 0.5% and 2%)
+- Breaking point: `f* = min{ f : P(E_t > 1%) > 5% }`, estimated over 30 seeds with a 95% bootstrap interval over seeds
+- Slow-burn success: first round after defection with `E_t > 1%`; "never" is recorded as never
+- Calibration: scenarios are split **as whole scenarios**, never as rows, so similar incidents cannot leak between fitting and testing
+
+## Results
+
+Setup: 21 nodes, 5 exchanges, 500 rounds, 30 seeds per point.
+
+### Claim 1: which aggregators tolerate faulty nodes?
+
+Breaking point (share of faulty nodes) at a 1% tolerance:
+
+| Scenario | Median | Trimmed mean | Inverse-error weighted | Reputation-weighted | Quorum median |
+| --- | --- | --- | --- | --- | --- |
+| Independent random errors (2–20%) | never (≤62%) | 33% | never | 24% | never |
+| Collusion at +5% | 52% | 33% | 52% | **24%** | 52% |
+| Gradual slow-burn | 52% | 33% | 52% | 43% | 52% |
+| Reputation exploit (trusted, then +5% fast) | 52% | 33% | 52% | **29%** | 52% |
+| Failing exchanges (share of nodes affected) | 67% | 52% | 67% | 57% | 67% |
+| Network partition | never | never | never | never | never (but stops answering at 33% offline) |
+
+- **Long-memory reputation weighting gave up about half of the median's tolerance.** Trusted attackers kept full weight for many rounds after defecting. Inverse-error weighting did not have this problem, because a 5% deviation instantly cuts its weight.
+- The median breaks at exactly 11 of 21 nodes, as theory predicts. The bootstrap intervals are zero-width because the attack sizes are fixed: these breaking points are structural, not noisy.
+- Results are sensitive to the tolerance for reputation weighting (10%–57% across 0.5%–2%) but not for the median. See `results/*/summary.json`.
+
+![Reputation exploit breaking-point curve](results/bp_reputation_exploit/breaking_point_tol0.01.png)
+
+### Claim 2: can slow-burn and correlated attacks evade detection?
+
+- Against 5 slow-burn attackers (`experiments/slow_burn.yaml`), MAD flagged the attackers 9 rounds after defection; the median never reached 1% error because 5 of 21 is below the breaking point.
+- A robust CUSUM catches small drift with near-zero false positives, but during development a version with a fixed noise scale raised false alarms on *honest* nodes when 30% of nodes colluded, because the colluders shifted the consensus. Detectors that compare against consensus inherit consensus contamination; the shipped CUSUM uses a per-round robust scale for this reason.
+- Failing exchanges look like collusion unless the diagnoser knows which node reads which exchange. OracleLens assumes it does; real networks may not publish this.
+
+### Claim 3: does the diagnosis know when it lacks evidence?
+
+200 random scenarios (1–3 faults each, 30% with legitimate market shocks), 6,500+ incidents. An isotonic calibration map is fitted on training scenarios and evaluated on held-out scenarios.
+
+| Split | Raw ECE | Calibrated ECE | Brier (raw → calibrated) | Coverage | Accuracy when it commits |
+| --- | --- | --- | --- | --- | --- |
+| Random grouped split | 0.116 | **0.018** | 0.137 → 0.104 | 90% | 97% |
+| Held-out families (replay, flash spike never seen in training) | 0.114 | **0.010** | 0.139 → 0.105 | 90% | 97% |
+
+- The hand-set rule confidences were **miscalibrated** (ECE 0.12); calibration on held-out scenarios fixed this and generalized to unseen attack families.
+- Weakest classes: stale (83–86% top-1) and isolated outliers, which most often end as *insufficient evidence*.
+
+![Reliability diagrams](results/calibration/reliability.png)
+
+### Case study: Mango Markets–style pump
+
+All nodes honestly reported the manipulated price, so consensus detection never fired. A volatility circuit breaker prevented ~99.6% of the modeled loss but paused honest borrowing for an hour after a legitimate +25% jump. Combining TWAP with the breaker prevented *less* than the breaker alone. Full write-up, assumptions and sources: [docs/case_study_mango.md](docs/case_study_mango.md).
+
+## Limitations
+
+- Simulated nodes and markets simplify real operators, exchanges and networks; results hold for these models.
+- Fault magnitudes are fixed per sweep, so breaking points are sharp; randomized magnitudes would widen intervals.
+- The attribution rules were developed while looking at the same simulator they are scored on. The held-out-family split reduces, but does not remove, this optimism.
+- No historical dataset is bundled. The loader and provenance are built; add a CSV with a `price` column and a `<file>.manifest.json`, then set `price.mode: historical`.
+
+## Not yet built (from the spec)
+
+Heartbeat/deviation-threshold publishing, the FastAPI/React dashboard, PDF export (reports are Markdown), and the Solidity/Hardhat layer.
+
+## Layout
+
+```
+oraclelens/        engine: config, prices, simulator, detectors, aggregators, diagnosis, metrics
+  run.py           single experiment CLI
+  sweep.py         breaking-point sweeps
+  calibrate.py     held-out calibration experiment
+  casestudies/     Mango case study
+experiments/       YAML configs
+tests/             pytest suite
+results/           generated sweep, calibration and case-study outputs
+docs/              case-study write-up
+```

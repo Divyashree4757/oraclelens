@@ -1,0 +1,108 @@
+{
+  "name": "bp_partition",
+  "config_hash": "f22e301e7c66581e903b43570ae5c27a840110436353cec6e17f18e7e015805f",
+  "seeds": 30,
+  "fault": {
+    "type": "partition",
+    "start": 50
+  },
+  "failure_prob_threshold": 0.05,
+  "breaking_points": {
+    "0.005": {
+      "median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "trimmed_mean": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "weighted": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "reputation": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "quorum_median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      }
+    },
+    "0.01": {
+      "median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "trimmed_mean": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "weighted": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "reputation": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "quorum_median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      }
+    },
+    "0.02": {
+      "median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "trimmed_mean": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "weighted": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "reputation": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      },
+      "quorum_median": {
+        "breaking_point": null,
+        "ci_low": null,
+        "ci_high": null,
+        "share_of_resamples_never_breaking": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "oraclelens_version": "0.1.0",
+  "python": "3.13.16",
+  "numpy": "2.5.3",
+  "seed": 42,
+  "config_hash": "21aa004ab93d74ce0d6409c1b9d78ef46c52ac24f44ab9d0c23bbded38c0c052",
+  "data_hash": "d1326619bf2bfe3f822362346602414f816d048101ca9cfa9b083f62e06b444b",
+  "inputs": {
+    "prices": {
+      "mode": "synthetic",
+      "start": 2000.0,
+      "drift": 0.0,
+      "vol": 0.002,
+      "jump_rate": 0.01,
+      "jump_scale": 0.03
+    }
+  }
+}

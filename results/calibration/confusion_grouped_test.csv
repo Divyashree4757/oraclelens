@@ -1,0 +1,9 @@
+true_cause,none,stale,delayed,offline,isolated_outlier,correlated_source,gradual_drift,coordinated_manipulation,insufficient_evidence
+none,2026,1,0,0,58,102,0,69,35
+stale,9,83,1,0,0,0,1,1,2
+delayed,0,0,461,0,1,0,0,1,5
+offline,0,0,0,66,0,0,0,0,0
+isolated_outlier,1,4,0,0,264,0,0,5,68
+correlated_source,0,13,1,0,1,175,0,0,7
+gradual_drift,6,0,0,0,0,0,84,0,2
+coordinated_manipulation,0,0,0,0,0,6,0,51,9

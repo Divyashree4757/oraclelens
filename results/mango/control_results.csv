@@ -1,0 +1,22 @@
+control,defense,minutes_paused,borrowing_capacity_vs_no_defense_at_move,final_capacity_vs_no_defense
+normal day,spot median (no defense),0,1.0,1.0
+normal day,node-consensus alarm,0,1.0,1.0
+normal day,TWAP 60 min,0,0.9345563102993428,0.9345563102993428
+normal day,rate limit 2%/min,0,1.0,1.0
+normal day,volatility circuit breaker,0,1.0,1.0
+normal day,TWAP + breaker,0,0.9345563102993428,0.9345563102993428
+normal day,per-account borrow cap,0,1.0,1.0
+legit rally +40% in 30 min,spot median (no defense),0,1.0,1.0
+legit rally +40% in 30 min,node-consensus alarm,0,1.0,1.0
+legit rally +40% in 30 min,TWAP 60 min,0,0.5176946651732739,0.9671168023861728
+legit rally +40% in 30 min,rate limit 2%/min,0,1.0,1.0
+legit rally +40% in 30 min,volatility circuit breaker,0,1.0,1.0
+legit rally +40% in 30 min,TWAP + breaker,0,0.5176946651732739,0.9671168023861728
+legit rally +40% in 30 min,per-account borrow cap,0,1.0,1.0
+legit jump +25% in 3 min,spot median (no defense),0,1.0,1.0
+legit jump +25% in 3 min,node-consensus alarm,0,1.0,1.0
+legit jump +25% in 3 min,TWAP 60 min,0,0.4951047503116099,0.9629422179464704
+legit jump +25% in 3 min,rate limit 2%/min,0,0.6922746829457256,0.9913735962543944
+legit jump +25% in 3 min,volatility circuit breaker,64,0.7050318394244652,0.9913735962543944
+legit jump +25% in 3 min,TWAP + breaker,64,0.46071979457161577,0.958084112630035
+legit jump +25% in 3 min,per-account borrow cap,0,1.0,1.0

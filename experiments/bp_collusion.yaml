@@ -1,0 +1,5 @@
+name: bp_collusion
+sweep:
+  title: Colluding nodes reporting the same +5% price
+  fault: {type: collusion, bias: 0.05, start: 50}
+  seeds: 30

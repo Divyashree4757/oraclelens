@@ -1,0 +1,4 @@
+# Single run: 5 of 21 nodes build reputation for 150 rounds, then defect slowly.
+name: slow_burn
+faults:
+  - {type: slow_burn, count: 5, start: 150, growth: 0.0005, max_bias: 0.05}

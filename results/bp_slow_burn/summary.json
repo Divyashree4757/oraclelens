@@ -1,0 +1,111 @@
+{
+  "name": "bp_slow_burn",
+  "config_hash": "a48c6ede412c58e6b2b38842683c9fdf281968640b4ea41a01a19d5c9187f539",
+  "seeds": 30,
+  "fault": {
+    "type": "slow_burn",
+    "start": 150,
+    "growth": 0.0005,
+    "max_bias": 0.05,
+    "trust_noise_factor": 0.2
+  },
+  "failure_prob_threshold": 0.05,
+  "breaking_points": {
+    "0.005": {
+      "median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "trimmed_mean": {
+        "breaking_point": 0.2857142857142857,
+        "ci_low": 0.2857142857142857,
+        "ci_high": 0.2857142857142857,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "weighted": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "reputation": {
+        "breaking_point": 0.23809523809523808,
+        "ci_low": 0.23809523809523808,
+        "ci_high": 0.23809523809523808,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "quorum_median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      }
+    },
+    "0.01": {
+      "median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "trimmed_mean": {
+        "breaking_point": 0.3333333333333333,
+        "ci_low": 0.3333333333333333,
+        "ci_high": 0.3333333333333333,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "weighted": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "reputation": {
+        "breaking_point": 0.42857142857142855,
+        "ci_low": 0.42857142857142855,
+        "ci_high": 0.42857142857142855,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "quorum_median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      }
+    },
+    "0.02": {
+      "median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "trimmed_mean": {
+        "breaking_point": 0.47619047619047616,
+        "ci_low": 0.47619047619047616,
+        "ci_high": 0.47619047619047616,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "weighted": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "reputation": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      },
+      "quorum_median": {
+        "breaking_point": 0.5238095238095238,
+        "ci_low": 0.5238095238095238,
+        "ci_high": 0.5238095238095238,
+        "share_of_resamples_never_breaking": 0.0
+      }
+    }
+  }
+}

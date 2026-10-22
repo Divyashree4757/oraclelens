@@ -1,0 +1,285 @@
+{
+  "documented": {
+    "date": "2022-10-11",
+    "perp_units": 483000000.0,
+    "entry_price": 0.0382,
+    "peak_price": 0.91,
+    "pump_multiple_range": [
+      10,
+      30
+    ],
+    "reported_loss_usd": 116000000.0,
+    "oracle_behaviour": "reported the manipulated market price as designed"
+  },
+  "assumptions": {
+    "round_length": "1 minute",
+    "fair_price": 0.0382,
+    "attacker_deposit_usd": 10000000.0,
+    "loan_to_value": 0.8,
+    "pool_liquidity_usd": 116000000.0,
+    "pump_start_round": 120,
+    "pump_duration_rounds": 20,
+    "borrow_cap_usd": 10000000.0,
+    "twap_window": 60,
+    "rate_limit_per_round": 0.02,
+    "breaker_move": 0.15,
+    "breaker_sigma": 8.0,
+    "breaker_pause_rounds": 60,
+    "consensus_alarm_share": 0.3
+  },
+  "seed": 11,
+  "max_share_of_nodes_flagged_during_pump": 0.047619047619047616,
+  "max_share_flagged_across_seeds": 0.19047619047619047,
+  "robustness_seeds": 30,
+  "loss_prevented_across_seeds": [
+    {
+      "defense": "spot median (no defense)",
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    {
+      "defense": "node-consensus alarm",
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    {
+      "defense": "TWAP 60 min",
+      "mean": 0.1804918273201028,
+      "min": 0.06334434677956402,
+      "max": 0.2812401117687059
+    },
+    {
+      "defense": "rate limit 2%/min",
+      "mean": 0.9020651237485696,
+      "min": 0.8986023039779162,
+      "max": 0.9035449669944203
+    },
+    {
+      "defense": "volatility circuit breaker",
+      "mean": 0.9964306303925383,
+      "min": 0.9883519853847591,
+      "max": 1.0
+    },
+    {
+      "defense": "TWAP + breaker",
+      "mean": 0.3913889933386349,
+      "min": 0.29439193926493146,
+      "max": 0.5102314863020695
+    },
+    {
+      "defense": "per-account borrow cap",
+      "mean": 0.9814814814814815,
+      "min": 0.9814814814814815,
+      "max": 0.9814814814814815
+    }
+  ],
+  "attack": [
+    {
+      "seed": 11,
+      "defense": "spot median (no defense)",
+      "attacker_borrowed_usd": 116000000.0,
+      "excess_over_fair_capacity_usd": 108000000.0,
+      "minutes_to_first_response": null,
+      "loss_prevented_vs_no_defense": 0.0
+    },
+    {
+      "seed": 11,
+      "defense": "node-consensus alarm",
+      "attacker_borrowed_usd": 116000000.0,
+      "excess_over_fair_capacity_usd": 108000000.0,
+      "minutes_to_first_response": null,
+      "loss_prevented_vs_no_defense": 0.0
+    },
+    {
+      "seed": 11,
+      "defense": "TWAP 60 min",
+      "attacker_borrowed_usd": 101638438.86073941,
+      "excess_over_fair_capacity_usd": 93638438.86073941,
+      "minutes_to_first_response": null,
+      "loss_prevented_vs_no_defense": 0.13297741795611662
+    },
+    {
+      "seed": 11,
+      "defense": "rate limit 2%/min",
+      "attacker_borrowed_usd": 18429917.425860055,
+      "excess_over_fair_capacity_usd": 10429917.425860055,
+      "minutes_to_first_response": null,
+      "loss_prevented_vs_no_defense": 0.9034266905012958
+    },
+    {
+      "seed": 11,
+      "defense": "volatility circuit breaker",
+      "attacker_borrowed_usd": 8054172.49626172,
+      "excess_over_fair_capacity_usd": 54172.496261719614,
+      "minutes_to_first_response": 0,
+      "loss_prevented_vs_no_defense": 0.9994984028123914
+    },
+    {
+      "seed": 11,
+      "defense": "TWAP + breaker",
+      "attacker_borrowed_usd": 77259612.06636825,
+      "excess_over_fair_capacity_usd": 69259612.06636825,
+      "minutes_to_first_response": 0,
+      "loss_prevented_vs_no_defense": 0.3587072956817754
+    },
+    {
+      "seed": 11,
+      "defense": "per-account borrow cap",
+      "attacker_borrowed_usd": 10000000.0,
+      "excess_over_fair_capacity_usd": 2000000.0,
+      "minutes_to_first_response": null,
+      "loss_prevented_vs_no_defense": 0.9814814814814815
+    }
+  ],
+  "controls": [
+    {
+      "control": "normal day",
+      "defense": "spot median (no defense)",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "normal day",
+      "defense": "node-consensus alarm",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "normal day",
+      "defense": "TWAP 60 min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.9345563102993428,
+      "final_capacity_vs_no_defense": 0.9345563102993428
+    },
+    {
+      "control": "normal day",
+      "defense": "rate limit 2%/min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "normal day",
+      "defense": "volatility circuit breaker",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "normal day",
+      "defense": "TWAP + breaker",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.9345563102993428,
+      "final_capacity_vs_no_defense": 0.9345563102993428
+    },
+    {
+      "control": "normal day",
+      "defense": "per-account borrow cap",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "spot median (no defense)",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "node-consensus alarm",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "TWAP 60 min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.5176946651732739,
+      "final_capacity_vs_no_defense": 0.9671168023861728
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "rate limit 2%/min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "volatility circuit breaker",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "TWAP + breaker",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.5176946651732739,
+      "final_capacity_vs_no_defense": 0.9671168023861728
+    },
+    {
+      "control": "legit rally +40% in 30 min",
+      "defense": "per-account borrow cap",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "spot median (no defense)",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "node-consensus alarm",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "TWAP 60 min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.4951047503116099,
+      "final_capacity_vs_no_defense": 0.9629422179464704
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "rate limit 2%/min",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 0.6922746829457256,
+      "final_capacity_vs_no_defense": 0.9913735962543944
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "volatility circuit breaker",
+      "minutes_paused": 64,
+      "borrowing_capacity_vs_no_defense_at_move": 0.7050318394244652,
+      "final_capacity_vs_no_defense": 0.9913735962543944
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "TWAP + breaker",
+      "minutes_paused": 64,
+      "borrowing_capacity_vs_no_defense_at_move": 0.46071979457161577,
+      "final_capacity_vs_no_defense": 0.958084112630035
+    },
+    {
+      "control": "legit jump +25% in 3 min",
+      "defense": "per-account borrow cap",
+      "minutes_paused": 0,
+      "borrowing_capacity_vs_no_defense_at_move": 1.0,
+      "final_capacity_vs_no_defense": 1.0
+    }
+  ]
+}

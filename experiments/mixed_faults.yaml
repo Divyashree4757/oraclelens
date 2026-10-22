@@ -1,0 +1,12 @@
+# Single run with several simultaneous fault types and a legitimate market shock.
+name: mixed_faults
+faults:
+  - {type: market_shock, start: 300, size: -0.15, duration: 3}
+  - {type: outlier, count: 2, prob: 0.2, start: 60}
+  - {type: stale, count: 1, start: 120, end: 220}
+  - {type: replay, count: 1, start: 140, end: 240, age: 20}
+  - {type: delay, count: 2, start: 100, end: 200, extra_ms: 1500}
+  - {type: offline, count: 2, start: 250, end: 280}
+  - {type: source_fault, source: 2, start: 350, end: 380, bias: 0.03}
+  - {type: drift, count: 1, start: 380, rate: 0.0003}
+  - {type: collusion, count: 3, start: 420, end: 470, bias: 0.04}

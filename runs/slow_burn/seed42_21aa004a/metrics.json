@@ -1,0 +1,212 @@
+{
+  "aggregation": {
+    "median": {
+      "availability": 1.0,
+      "mean_error": 0.0003218647774050547,
+      "median_error": 0.00022291811686154763,
+      "p95_error": 0.000853492668886392,
+      "max_error": 0.0029209122654704676,
+      "failure_rate@0.005": 0.0,
+      "failure_rate@0.01": 0.0,
+      "failure_rate@0.02": 0.0
+    },
+    "trimmed_mean": {
+      "availability": 1.0,
+      "mean_error": 0.0027717581303583674,
+      "median_error": 0.003785889636245589,
+      "p95_error": 0.004529413238214375,
+      "max_error": 0.00494899293336364,
+      "failure_rate@0.005": 0.0,
+      "failure_rate@0.01": 0.0,
+      "failure_rate@0.02": 0.0
+    },
+    "weighted": {
+      "availability": 1.0,
+      "mean_error": 0.0003410938261055624,
+      "median_error": 0.00024474347980947303,
+      "p95_error": 0.000873541880083141,
+      "max_error": 0.003589704335327538,
+      "failure_rate@0.005": 0.0,
+      "failure_rate@0.01": 0.0,
+      "failure_rate@0.02": 0.0
+    },
+    "reputation": {
+      "availability": 1.0,
+      "mean_error": 0.002123613346718783,
+      "median_error": 0.0015831707780079585,
+      "p95_error": 0.0055074926990488875,
+      "max_error": 0.00610653868022437,
+      "failure_rate@0.005": 0.10444444444444445,
+      "failure_rate@0.01": 0.0,
+      "failure_rate@0.02": 0.0
+    },
+    "quorum_median": {
+      "availability": 1.0,
+      "mean_error": 0.0003218647774050547,
+      "median_error": 0.00022291811686154763,
+      "p95_error": 0.000853492668886392,
+      "max_error": 0.0029209122654704676,
+      "failure_rate@0.005": 0.0,
+      "failure_rate@0.01": 0.0,
+      "failure_rate@0.02": 0.0
+    }
+  },
+  "detection": {
+    "mad": {
+      "precision": 0.9654390934844193,
+      "recall": 0.9748283752860412,
+      "false_positive_rate": 0.00792825578372758,
+      "true_positives": 1704,
+      "false_positives": 61,
+      "false_negatives": 44,
+      "faults_detected": 1.0,
+      "median_latency_rounds": 9.0,
+      "mean_latency_rounds": 9.0
+    },
+    "hampel": {
+      "precision": 0.15282392026578073,
+      "recall": 0.02631578947368421,
+      "false_positive_rate": 0.0331427086041071,
+      "true_positives": 46,
+      "false_positives": 255,
+      "false_negatives": 1702,
+      "faults_detected": 1.0,
+      "median_latency_rounds": 2.0,
+      "mean_latency_rounds": 2.0
+    },
+    "rolling": {
+      "precision": 0.8711283185840708,
+      "recall": 0.9010297482837528,
+      "false_positive_rate": 0.030283337665713544,
+      "true_positives": 1575,
+      "false_positives": 233,
+      "false_negatives": 173,
+      "faults_detected": 1.0,
+      "median_latency_rounds": 16.0,
+      "mean_latency_rounds": 15.2
+    },
+    "cusum": {
+      "precision": 1.0,
+      "recall": 0.9742562929061785,
+      "false_positive_rate": 0.0,
+      "true_positives": 1703,
+      "false_positives": 0,
+      "false_negatives": 45,
+      "faults_detected": 1.0,
+      "median_latency_rounds": 9.0,
+      "mean_latency_rounds": 9.2
+    },
+    "vol_mad": {
+      "precision": 1.0,
+      "recall": 0.9576659038901602,
+      "false_positive_rate": 0.0,
+      "true_positives": 1674,
+      "false_positives": 0,
+      "false_negatives": 74,
+      "faults_detected": 1.0,
+      "median_latency_rounds": 10.0,
+      "mean_latency_rounds": 10.0
+    }
+  },
+  "slow_burn": [
+    {
+      "aggregator": "median",
+      "attackers": 5,
+      "trust_rounds": 150,
+      "rounds_to_success": null,
+      "rounds_to_detection[mad]": 9,
+      "damage_before_detection[mad]": 0.0033531080339618334,
+      "rounds_to_detection[hampel]": 2,
+      "damage_before_detection[hampel]": 0.0009750522536217953,
+      "rounds_to_detection[rolling]": 14,
+      "damage_before_detection[rolling]": 0.005793476472122051,
+      "rounds_to_detection[cusum]": 9,
+      "damage_before_detection[cusum]": 0.0033531080339618334,
+      "rounds_to_detection[vol_mad]": 10,
+      "damage_before_detection[vol_mad]": 0.004145774964069763
+    },
+    {
+      "aggregator": "trimmed_mean",
+      "attackers": 5,
+      "trust_rounds": 150,
+      "rounds_to_success": null,
+      "rounds_to_detection[mad]": 9,
+      "damage_before_detection[mad]": 0.004508234337814506,
+      "rounds_to_detection[hampel]": 2,
+      "damage_before_detection[hampel]": 0.0007296111697468906,
+      "rounds_to_detection[rolling]": 14,
+      "damage_before_detection[rolling]": 0.008540418346904503,
+      "rounds_to_detection[cusum]": 9,
+      "damage_before_detection[cusum]": 0.004508234337814506,
+      "rounds_to_detection[vol_mad]": 10,
+      "damage_before_detection[vol_mad]": 0.005762194279407504
+    },
+    {
+      "aggregator": "weighted",
+      "attackers": 5,
+      "trust_rounds": 150,
+      "rounds_to_success": null,
+      "rounds_to_detection[mad]": 9,
+      "damage_before_detection[mad]": 0.006694468484366868,
+      "rounds_to_detection[hampel]": 2,
+      "damage_before_detection[hampel]": 0.0008525720439882395,
+      "rounds_to_detection[rolling]": 14,
+      "damage_before_detection[rolling]": 0.011325724530645525,
+      "rounds_to_detection[cusum]": 9,
+      "damage_before_detection[cusum]": 0.006694468484366868,
+      "rounds_to_detection[vol_mad]": 10,
+      "damage_before_detection[vol_mad]": 0.008053532694207586
+    },
+    {
+      "aggregator": "reputation",
+      "attackers": 5,
+      "trust_rounds": 150,
+      "rounds_to_success": null,
+      "rounds_to_detection[mad]": 9,
+      "damage_before_detection[mad]": 0.005880576357411915,
+      "rounds_to_detection[hampel]": 2,
+      "damage_before_detection[hampel]": 0.0006525305073859331,
+      "rounds_to_detection[rolling]": 14,
+      "damage_before_detection[rolling]": 0.013441438017196643,
+      "rounds_to_detection[cusum]": 9,
+      "damage_before_detection[cusum]": 0.005880576357411915,
+      "rounds_to_detection[vol_mad]": 10,
+      "damage_before_detection[vol_mad]": 0.007527012821262383
+    },
+    {
+      "aggregator": "quorum_median",
+      "attackers": 5,
+      "trust_rounds": 150,
+      "rounds_to_success": null,
+      "rounds_to_detection[mad]": 9,
+      "damage_before_detection[mad]": 0.0033531080339618334,
+      "rounds_to_detection[hampel]": 2,
+      "damage_before_detection[hampel]": 0.0009750522536217953,
+      "rounds_to_detection[rolling]": 14,
+      "damage_before_detection[rolling]": 0.005793476472122051,
+      "rounds_to_detection[cusum]": 9,
+      "damage_before_detection[cusum]": 0.0033531080339618334,
+      "rounds_to_detection[vol_mad]": 10,
+      "damage_before_detection[vol_mad]": 0.004145774964069763
+    }
+  ],
+  "attribution": {
+    "incidents": 64,
+    "top1_accuracy": 0.78125,
+    "coverage": 0.953125,
+    "accuracy_when_decided": 0.819672131147541,
+    "ece": 0.1805004542151814,
+    "brier": 0.30722792366381746,
+    "confusion": {
+      "none->none": 40,
+      "none->isolated_outlier": 6,
+      "delayed->delayed": 5,
+      "gradual_drift->gradual_drift": 5,
+      "none->coordinated_manipulation": 2,
+      "none->correlated_source": 2,
+      "none->insufficient_evidence": 2,
+      "gradual_drift->delayed": 1,
+      "delayed->insufficient_evidence": 1
+    }
+  }
+}
