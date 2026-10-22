@@ -2,7 +2,7 @@
   "aggregation": {
     "median": {
       "availability": 1.0,
-      "mean_error": 0.0003326006217144008,
+      "mean_error": 0.00033260062171439693,
       "median_error": 0.00024310324515987465,
       "p95_error": 0.000721713769249417,
       "max_error": 0.004701992092224099,
@@ -12,7 +12,7 @@
     },
     "trimmed_mean": {
       "availability": 1.0,
-      "mean_error": 0.00037081214262247664,
+      "mean_error": 0.00037081214262247713,
       "median_error": 0.00024325315662027125,
       "p95_error": 0.0008113060146697401,
       "max_error": 0.005009064182243889,
@@ -22,17 +22,17 @@
     },
     "weighted": {
       "availability": 1.0,
-      "mean_error": 0.000452667190666768,
-      "median_error": 0.00026961656995863376,
-      "p95_error": 0.0011392661867002348,
-      "max_error": 0.009322197961753272,
+      "mean_error": 0.0004526671906667621,
+      "median_error": 0.0002696165699588099,
+      "p95_error": 0.0011392661866999401,
+      "max_error": 0.00932219796175361,
       "failure_rate@0.005": 0.006666666666666667,
       "failure_rate@0.01": 0.0,
       "failure_rate@0.02": 0.0
     },
     "reputation": {
       "availability": 1.0,
-      "mean_error": 0.0025176813088134144,
+      "mean_error": 0.002517681308813414,
       "median_error": 0.0010615256535373764,
       "p95_error": 0.007227191223656127,
       "max_error": 0.013137659240647952,
@@ -42,7 +42,7 @@
     },
     "quorum_median": {
       "availability": 1.0,
-      "mean_error": 0.0003326006217144008,
+      "mean_error": 0.00033260062171439693,
       "median_error": 0.00024310324515987465,
       "p95_error": 0.000721713769249417,
       "max_error": 0.004701992092224099,
@@ -114,8 +114,8 @@
     "top1_accuracy": 0.9466666666666667,
     "coverage": 0.8533333333333334,
     "accuracy_when_decided": 0.9609375,
-    "ece": 0.13838238195998998,
-    "brier": 0.15435473123691645,
+    "ece": 0.13838238195999014,
+    "brier": 0.15435473123691656,
     "confusion": {
       "isolated_outlier->isolated_outlier": 67,
       "none->none": 31,

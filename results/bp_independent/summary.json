@@ -33,9 +33,9 @@
         "share_of_resamples_never_breaking": 1.0
       },
       "reputation": {
-        "breaking_point": 0.09523809523809523,
-        "ci_low": 0.047619047619047616,
-        "ci_high": 0.09523809523809523,
+        "breaking_point": 0.09523809523809522,
+        "ci_low": 0.04761904761904761,
+        "ci_high": 0.09523809523809522,
         "share_of_resamples_never_breaking": 0.0
       },
       "quorum_median": {

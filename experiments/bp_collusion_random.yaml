@@ -1,0 +1,9 @@
+name: bp_collusion_random
+sweep:
+  title: Colluding nodes, random size (0.5–8%) and direction
+  fault:
+    type: collusion
+    bias: {uniform: [0.005, 0.08]}
+    direction: {choice: [-1, 1]}
+    start: {uniform: [50, 150]}
+  seeds: 30

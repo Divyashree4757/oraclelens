@@ -1,10 +1,10 @@
 {
   "oraclelens_version": "0.1.0",
-  "python": "3.9.6",
-  "numpy": "2.0.2",
+  "python": "3.13.16",
+  "numpy": "2.5.3",
   "seed": 42,
   "config_hash": "386c8c17670872bbd6da58efa56a145c175b6eab47032313a1ac0e8b741c55fb",
-  "data_hash": "144ac49683e1145076022988d241dfd78889ca80135e7dd5e5af3078e644834a",
+  "data_hash": "fc3d4bdd9eeb974d8867227f7338a88003c2cff248d2fa7ca8ae493a3c3cb955",
   "inputs": {
     "prices": {
       "mode": "synthetic",

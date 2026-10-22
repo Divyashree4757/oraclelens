@@ -24,6 +24,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from . import CAUSE_ID
 from .aggregators import run_aggregators
 from .config import config_hash, load_config
 from .metrics import breaking_point, relative_error
@@ -50,11 +51,15 @@ def run_sweep(cfg: dict, seeds: int | None = None) -> pd.DataFrame:
                 new = [dict(sw["fault"], count=int(k))] if k > 0 else []
             c["faults"] = list(cfg["faults"]) + new
             sim = simulate(c, seed)
-            frac = float((sim.labels[warmup:] != 0).any(axis=0).mean()) if by_source else k / n
+            # share of nodes reading a failed exchange (only the injected cause counts)
+            frac = (float((sim.labels[warmup:] == CAUSE_ID["correlated_source"]).any(axis=0).mean())
+                    if by_source else k / n)
+            drawn = json.dumps([e.get("params", {}) for e in sim.events], default=float)
             for name, agg in run_aggregators(sim, c).items():
                 err = relative_error(agg, sim.truth)[warmup:]
                 ok = ~np.isnan(err)
                 row = {"faulty_nodes": k, "fraction": frac, "seed": seed, "aggregator": name,
+                       "fault_params": drawn,
                        "availability": float(ok.mean()),
                        "mean_error": float(err[ok].mean()) if ok.any() else np.nan}
                 for t in tols:
@@ -70,13 +75,15 @@ def summarize(df: pd.DataFrame, tol: float, threshold: float, n_boot: int = 1000
     rng = np.random.default_rng(rng_seed)
     curves, bps = [], {}
     for name, g in df.groupby("aggregator", sort=False):
-        piv = g.pivot(index="seed", columns="fraction", values=col).sort_index(axis=1)
-        fr, mat = piv.columns.to_numpy(), piv.to_numpy()
+        # pivot on the attacker count; x position = mean affected fraction for that count
+        piv = g.pivot(index="seed", columns="faulty_nodes", values=col).sort_index(axis=1)
+        fr = g.groupby("faulty_nodes")["fraction"].mean().reindex(piv.columns).to_numpy()
+        mat = piv.to_numpy()
         boot_idx = rng.integers(0, mat.shape[0], (n_boot, mat.shape[0]))
         boot_means = np.nanmean(mat[boot_idx], axis=1)          # (n_boot, n_fr)
         lo, hi = np.nanpercentile(boot_means, [2.5, 97.5], axis=0)
         mean = np.nanmean(mat, axis=0)
-        avail = g.groupby("fraction")["availability"].mean().reindex(fr).to_numpy()
+        avail = g.groupby("faulty_nodes")["availability"].mean().reindex(piv.columns).to_numpy()
         for i, f in enumerate(fr):
             curves.append({"aggregator": name, "fraction": f, "fail_prob": mean[i],
                            "ci_low": lo[i], "ci_high": hi[i], "availability": avail[i]})
@@ -96,7 +103,7 @@ def summarize(df: pd.DataFrame, tol: float, threshold: float, n_boot: int = 1000
 def plot_curves(curves: pd.DataFrame, bps: dict, title: str, tol: float, threshold: float, path):
     fig, axes = figure()
     ax = axes[0][0]
-    seen = {}
+    seen, labelled = {}, set()
     for name, g in curves.groupby("aggregator", sort=False):
         color = ENTITY_COLOR.get(name, "#2a78d6")
         label = name.replace("_", " ")
@@ -109,7 +116,8 @@ def plot_curves(curves: pd.DataFrame, bps: dict, title: str, tol: float, thresho
         ax.plot(g["fraction"], g["fail_prob"], color=color, linewidth=2, marker="o", markersize=4,
                 label=label)
         bp = bps[name]["breaking_point"]
-        if bp is not None and not label.endswith(")"):
+        if bp is not None and not label.endswith(")") and round(bp, 6) not in labelled:
+            labelled.add(round(bp, 6))
             y = float(g.loc[g["fraction"] == bp, "fail_prob"].iloc[0])
             ax.annotate(f"{bp:.0%}", (bp, y), textcoords="offset points", xytext=(4, 6),
                         fontsize=8, color=INK2)
@@ -127,8 +135,8 @@ def plot_availability(df: pd.DataFrame, title: str, path):
     fig, axes = figure(7.5, 3.4)
     ax = axes[0][0]
     for name, g in df.groupby("aggregator", sort=False):
-        a = g.groupby("fraction")["availability"].mean()
-        ax.plot(a.index, a.values, color=ENTITY_COLOR.get(name, "#2a78d6"), linewidth=2,
+        a = g.groupby("faulty_nodes")[["fraction", "availability"]].mean()
+        ax.plot(a["fraction"], a["availability"], color=ENTITY_COLOR.get(name, "#2a78d6"), linewidth=2,
                 marker="o", markersize=4, label=name.replace("_", " "))
     ax.xaxis.set_major_formatter(lambda v, _: f"{v:.0%}")
     ax.yaxis.set_major_formatter(lambda v, _: f"{v:.0%}")

@@ -1,6 +1,6 @@
 # OracleLens run: mixed_faults (seed 42)
 
-Config hash `386c8c17670872bb` · data hash `144ac49683e11450` · OracleLens 0.1.0
+Config hash `386c8c17670872bb` · data hash `fc3d4bdd9eeb974d` · OracleLens 0.1.0
 
 ## Injected faults
 

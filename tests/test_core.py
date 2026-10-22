@@ -158,3 +158,21 @@ def test_brier():
 def test_breaking_point_definition():
     assert breaking_point([0, 0.2, 0.4], [0.0, 0.05, 0.06], 0.05) == 0.4   # strictly greater
     assert breaking_point([0, 0.2], [0.0, 0.01], 0.05) is None
+
+
+# --------------------------------------------------------- randomized params
+def test_random_params_are_reproducible_and_vary_by_seed():
+    f = [{"type": "collusion", "count": 3, "bias": {"uniform": [0.01, 0.08]},
+          "direction": {"choice": [-1, 1]}, "start": {"uniform": [60, 120]}}]
+    a = simulate(cfg(f), 4).events[0]["params"]
+    b = simulate(cfg(f), 4).events[0]["params"]
+    c = simulate(cfg(f), 5).events[0]["params"]
+    assert a == b and a != c
+    assert 0.01 <= a["bias"] <= 0.08 and isinstance(a["start"], int)
+
+
+def test_attack_draw_independent_of_attacker_count():
+    base = {"type": "collusion", "bias": {"uniform": [0.01, 0.08]}}
+    one = simulate(cfg([dict(base, count=1)]), 9).events[0]["params"]["bias"]
+    five = simulate(cfg([dict(base, count=5)]), 9).events[0]["params"]["bias"]
+    assert one == five

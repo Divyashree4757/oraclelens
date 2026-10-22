@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from . import CAUSE_ID
+from .params import sample_params
 from .prices import true_prices
 
 # fault type -> ground-truth cause it produces
@@ -71,6 +72,10 @@ def _pick_nodes(f: dict, n: int, used: set, source_of: np.ndarray,
 
 def simulate(cfg: dict, seed: int) -> SimResult:
     rng = np.random.default_rng(seed)
+    # Draw any randomized fault parameters first, each from its own stream, so a
+    # seed gives the same attack whatever else changes (e.g. how many attackers).
+    cfg = {**cfg, "faults": [sample_params(f, np.random.default_rng([seed, i, 1]))
+                             for i, f in enumerate(cfg["faults"])]}
     R, N, S = int(cfg["rounds"]), int(cfg["nodes"]), int(cfg["sources"])
     noise, net = cfg["noise"], cfg["network"]
 
@@ -101,7 +106,8 @@ def simulate(cfg: dict, seed: int) -> SimResult:
         cause = CAUSE_ID[FAULT_CAUSE[ftype]]
         if ftype == "market_shock":
             events.append({"index": idx, "type": ftype, "nodes": [], "start": int(f["start"]),
-                           "end": int(f["start"]) + int(f.get("duration", 5)), "cause": "none"})
+                           "end": int(f["start"]) + int(f.get("duration", 5)), "cause": "none",
+                           "params": {k: v for k, v in f.items() if k != "type"}})
             continue
 
         frng = np.random.default_rng([seed, idx])   # independent stream per fault
@@ -126,7 +132,7 @@ def simulate(cfg: dict, seed: int) -> SimResult:
             lab[hit] = cause
             labels[sl, cols] = lab
         elif ftype == "collusion":
-            bias = float(f.get("bias", 0.05))
+            bias = float(f.get("bias", 0.05)) * float(f.get("direction", 1.0))
             jitter = frng.normal(0.0, noise["node_sigma"] * 0.2, (n_t, len(nodes)))
             obs[sl, cols] = truth[sl, None] * (1.0 + bias + jitter)
             labels[sl, cols] = cause
@@ -162,7 +168,8 @@ def simulate(cfg: dict, seed: int) -> SimResult:
             extra = frng.exponential(float(f.get("extra_ms", 1500.0)), (n_t, len(nodes)))
             latency[sl, cols] += extra
         elif ftype in ("source_fault", "flash_spike"):
-            bias = float(f.get("bias", 0.2 if ftype == "flash_spike" else 0.03))
+            bias = float(f.get("bias", 0.2 if ftype == "flash_spike" else 0.03)) \
+                * float(f.get("direction", 1.0))
             obs[sl, cols] = honest[sl][:, cols] * (1.0 + bias)
             labels[sl, cols] = cause
 

@@ -1,0 +1,10 @@
+name: bp_source_random
+sweep:
+  title: Failing exchanges, random error (1–6%) and direction
+  by_source: true
+  fault:
+    type: source_fault
+    bias: {uniform: [0.01, 0.06]}
+    direction: {choice: [-1, 1]}
+    start: 50
+  seeds: 30

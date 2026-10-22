@@ -8,9 +8,9 @@ A reproducible laboratory for decentralized oracle reliability. OracleLens simul
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest                                   # 23 tests
+python -m pytest                                   # 25 tests
 python -m oraclelens.run --config experiments/mixed_faults.yaml --seed 42
-./reproduce.sh                                     # every result below, ~5 minutes
+./reproduce.sh                                     # every result below, ~7 minutes
 ```
 
 Every run is defined by a YAML config plus a seed and writes a self-contained folder:
@@ -27,6 +27,19 @@ runs/<name>/seed<seed>_<config-hash>/
 ```
 
 No database is needed to reproduce anything.
+
+Fault parameters can be fixed numbers or distributions, drawn once per seed:
+
+```yaml
+faults:
+  - type: collusion
+    count: 4
+    bias: {uniform: [0.005, 0.08]}     # also: loguniform, normal, choice
+    direction: {choice: [-1, 1]}
+    start: {uniform: [50, 150]}        # integer parameters are rounded
+```
+
+The drawn values are saved in each run's events, and a seed always produces the same attack regardless of how many attackers are used, so sweep curves compare like with like.
 
 ## What is built
 
@@ -55,22 +68,23 @@ Setup: 21 nodes, 5 exchanges, 500 rounds, 30 seeds per point.
 
 ### Claim 1: which aggregators tolerate faulty nodes?
 
-Breaking point (share of faulty nodes) at a 1% tolerance:
+Breaking point (share of faulty nodes) at a 1% tolerance. Attack sizes, directions and timing are **randomized per seed**; brackets show the 95% bootstrap interval where it is not a single value. Fixed-size versions of each sweep and the 0.5% and 2% tolerances are in [results/breaking_points.md](results/breaking_points.md).
 
 | Scenario | Median | Trimmed mean | Inverse-error weighted | Reputation-weighted | Quorum median |
 | --- | --- | --- | --- | --- | --- |
 | Independent random errors (2–20%) | never (≤62%) | 33% | never | 24% | never |
-| Collusion at +5% | 52% | 33% | 52% | **24%** | 52% |
-| Gradual slow-burn | 52% | 33% | 52% | 43% | 52% |
-| Reputation exploit (trusted, then +5% fast) | 52% | 33% | 52% | **29%** | 52% |
-| Failing exchanges (share of nodes affected) | 67% | 52% | 67% | 57% | 67% |
+| Collusion, 0.5–8% either direction | 52% | 29% | 52% | **24% [24–29%]** | 52% |
+| Gradual slow-burn, random trust period and speed | 52% | 29% [29–33%] | 52% | 43% [38–48%] | 52% |
+| Reputation exploit (trusted, then fast defection) | 52% | 29% | 52% | **29% [24–29%]** | 52% |
+| Failing exchanges, 1–6% error (share of nodes affected) | 62% [62–81%] | 43% | 62% [62–81%] | 43% [43–81%] | 62% [62–81%] |
 | Network partition | never | never | never | never | never (but stops answering at 33% offline) |
 
-- **Long-memory reputation weighting gave up about half of the median's tolerance.** Trusted attackers kept full weight for many rounds after defecting. Inverse-error weighting did not have this problem, because a 5% deviation instantly cuts its weight.
-- The median breaks at exactly 11 of 21 nodes, as theory predicts. The bootstrap intervals are zero-width because the attack sizes are fixed: these breaking points are structural, not noisy.
-- Results are sensitive to the tolerance for reputation weighting (10%–57% across 0.5%–2%) but not for the median. See `results/*/summary.json`.
+- **Long-memory reputation weighting gave up about half of the median's tolerance.** Trusted attackers kept full weight for many rounds after defecting. Inverse-error weighting did not have this problem, because a large deviation instantly cuts its weight.
+- **The conclusions survive randomization.** Randomizing attack size, direction and timing moved trimmed-mean breaking points earlier (33% → 29%, because some draws reached 8%) but left the ranking unchanged.
+- The median breaks at 11 of 21 nodes, as theory predicts, so its interval stays a single value: this breaking point is structural. Intervals are also coarse because the attacker count moves in steps of one node (about 5%).
+- Results are sensitive to the tolerance for reputation weighting (10%–57% across 0.5%–2%) but not for the median.
 
-![Reputation exploit breaking-point curve](results/bp_reputation_exploit/breaking_point_tol0.01.png)
+![Collusion breaking-point curve with randomized attacks](results/bp_collusion_random/breaking_point_tol0.01.png)
 
 ### Claim 2: can slow-burn and correlated attacks evade detection?
 
@@ -99,7 +113,7 @@ All nodes honestly reported the manipulated price, so consensus detection never 
 ## Limitations
 
 - Simulated nodes and markets simplify real operators, exchanges and networks; results hold for these models.
-- Fault magnitudes are fixed per sweep, so breaking points are sharp; randomized magnitudes would widen intervals.
+- Attacker counts move in whole nodes, so breaking points are resolved only to about 5% with 21 nodes; larger networks would sharpen this.
 - The attribution rules were developed while looking at the same simulator they are scored on. The held-out-family split reduces, but does not remove, this optimism.
 - No historical dataset is bundled. The loader and provenance are built; add a CSV with a `price` column and a `<file>.manifest.json`, then set `price.mode: historical`.
 
@@ -113,6 +127,8 @@ Heartbeat/deviation-threshold publishing, the FastAPI/React dashboard, PDF expor
 oraclelens/        engine: config, prices, simulator, detectors, aggregators, diagnosis, metrics
   run.py           single experiment CLI
   sweep.py         breaking-point sweeps
+  summary.py       breaking-point table across all sweeps
+  params.py        randomized fault parameters
   calibrate.py     held-out calibration experiment
   casestudies/     Mango case study
 experiments/       YAML configs
