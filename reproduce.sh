@@ -9,5 +9,6 @@ done
 python -m oraclelens.summary --results results
 python -m oraclelens.calibrate --scenarios 200 --out results
 python -m oraclelens.casestudies.mango --out results
+python -m oraclelens.lab.export --results results --out docs
 python -m oraclelens.run --config experiments/slow_burn.yaml --seed 42
 python -m oraclelens.run --config experiments/mixed_faults.yaml --seed 42

@@ -248,6 +248,20 @@ def main(argv=None) -> None:
     ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=3)
     save(fig, out / "borrowing.png")
 
+    # Raw curves for the dashboard (minutes relative to pump start).
+    def clean(a):
+        return [None if not np.isfinite(v) else float(v) for v in np.asarray(a, float)]
+    (out / "curves.json").write_text(json.dumps({
+        "minutes": [int(t - t0) for t in range(len(curves[order[0]]))],
+        "valuation": {k: clean(defenses[k][0]) for k in
+                      ("spot median (no defense)", f"TWAP {a['twap_window']} min",
+                       f"rate limit {a['rate_limit_per_round']:.0%}/min")},
+        "paused": {k: [bool(x) for x in defenses[k][1]] for k in
+                   ("volatility circuit breaker", "TWAP + breaker")},
+        "borrowed_usd": {k: clean(v) for k, v in curves.items()},
+        "pump_window": [0, a["pump_duration_rounds"]],
+    }))
+
     print(f"max share of nodes flagged by MAD during pump: {flagged_share:.0%}")
     print(results[["defense", "attacker_borrowed_usd", "loss_prevented_vs_no_defense",
                    "minutes_to_first_response"]].to_string(index=False))

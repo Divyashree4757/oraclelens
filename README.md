@@ -8,10 +8,23 @@ A reproducible laboratory for decentralized oracle reliability. OracleLens simul
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest                                   # 25 tests
+python -m pytest                                   # 30 tests
+python -m oraclelens.lab                           # dashboard + live lab at http://127.0.0.1:8000
 python -m oraclelens.run --config experiments/mixed_faults.yaml --seed 42
 ./reproduce.sh                                     # every result below, ~7 minutes
 ```
+
+## Dashboard
+
+`python -m oraclelens.lab` opens a dashboard with five views:
+
+- **Findings:** the headline results in one page.
+- **Breaking points:** every sweep, switchable by scenario and error tolerance, with confidence bands and availability.
+- **Diagnosis:** reliability diagrams, calibration metrics and the cause-attribution confusion matrix.
+- **Mango case study:** the price each defense would have used and how much the attacker could borrow.
+- **Live lab:** build an attack (12 fault types), run it, then scrub round by round through a node × round heatmap (ground truth, deviation, or any detector's hits and false alarms), inspect each node's report in a single round, and read the diagnosis engine's explanation of every incident. Scenarios can be copied out as YAML for the CLI.
+
+A static copy of the first four views (no server needed) is written to `docs/index.html` by `python -m oraclelens.lab.export`. To publish it, enable GitHub Pages for this repository from the `main` branch, `/docs` folder.
 
 Every run is defined by a YAML config plus a seed and writes a self-contained folder:
 
@@ -119,7 +132,7 @@ All nodes honestly reported the manipulated price, so consensus detection never 
 
 ## Not yet built (from the spec)
 
-Heartbeat/deviation-threshold publishing, the FastAPI/React dashboard, PDF export (reports are Markdown), and the Solidity/Hardhat layer.
+Heartbeat/deviation-threshold publishing, live WebSocket streaming (the lab runs a whole simulation, then replays it), PDF export (reports are Markdown), and the Solidity/Hardhat layer.
 
 ## Layout
 
@@ -131,8 +144,9 @@ oraclelens/        engine: config, prices, simulator, detectors, aggregators, di
   params.py        randomized fault parameters
   calibrate.py     held-out calibration experiment
   casestudies/     Mango case study
+  lab/             dashboard: FastAPI server, static export, single-page app
 experiments/       YAML configs
 tests/             pytest suite
 results/           generated sweep, calibration and case-study outputs
-docs/              case-study write-up
+docs/              case-study write-up and the static dashboard (index.html)
 ```
